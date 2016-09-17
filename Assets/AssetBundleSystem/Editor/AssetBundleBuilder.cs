@@ -10,11 +10,14 @@ namespace AssetBundleSystem
 {
     public class AssetBundleBuilder
     {
-        const BuildAssetBundleOptions options =
-            BuildAssetBundleOptions.DeterministicAssetBundle |
-            BuildAssetBundleOptions.CollectDependencies |
-            BuildAssetBundleOptions.UncompressedAssetBundle |
-            BuildAssetBundleOptions.CompleteAssets;
+#if UNITY_5
+        const BuildAssetBundleOptions options = BuildAssetBundleOptions.None;
+#else
+        const BuildAssetBundleOptions options = BuildAssetBundleOptions.DeterministicAssetBundle |
+                                                BuildAssetBundleOptions.CollectDependencies |
+                                                BuildAssetBundleOptions.UncompressedAssetBundle |
+                                                BuildAssetBundleOptions.CompleteAssets;
+#endif
 
         protected AssetBundleDataWriter _dataWriter;
         protected AssetBundlePathResolver _pathResolver;
@@ -33,7 +36,11 @@ namespace AssetBundleSystem
                     case BuildTarget.StandaloneWindows:
                         res += "/windows";
                         break;
+#if UNITY_5
+                    case BuildTarget.iOS:
+#else
                     case BuildTarget.iPhone:
+#endif
                         res += "/ios";
                         break;
                     case BuildTarget.Android:

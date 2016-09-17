@@ -36,14 +36,22 @@ namespace AssetBundleSystem
 
         public UnityObject Load(string objName, Type type)
         {
+#if UNITY_5
+            UnityObject origin = bundle.LoadAsset(objName, type);
+#else
             UnityObject origin = bundle.Load(objName, type);
+#endif
             AddReference(origin);
             return origin;
         }
 
         public GameObject LoadAndInstantiate(string objName)
         {
+#if UNITY_5
+            UnityObject prefab = bundle.LoadAsset<GameObject>(objName);
+#else
             UnityObject prefab = bundle.Load(objName, typeof(GameObject));
+#endif
             if (prefab == null)
             {
                 Debug.LogError(string.Format("Failed to load {0} from {1}", objName, name));
@@ -57,7 +65,11 @@ namespace AssetBundleSystem
 
         public GameObject LoadAndInstantiate(string objName, Vector3 pos, Quaternion rot)
         {
+#if UNITY_5
+            UnityObject prefab = bundle.LoadAsset<GameObject>(objName);
+#else
             UnityObject prefab = bundle.Load(objName, typeof(GameObject));
+#endif
             if (prefab == null)
             {
                 Debug.LogError(string.Format("Failed to load {0} from {1}", objName, name));

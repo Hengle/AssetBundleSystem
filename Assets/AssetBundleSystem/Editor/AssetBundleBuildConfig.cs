@@ -11,8 +11,8 @@ namespace AssetBundleSystem
             Text, Binary
         }
 
-        public string bundlePath;
-        public Format bundleInfoFileFormt = Format.Binary;
+        public string bundlePath = string.Empty;
+        public Format bundleInfoFileFormt = Format.Text;
 
         public List<AssetBundleConfigNode> allDependNodes = new List<AssetBundleConfigNode>();
         public List<string> persistentAssets = new List<string>();

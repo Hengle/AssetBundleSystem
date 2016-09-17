@@ -267,7 +267,11 @@ namespace AssetBundleSystem
             // 优先读取persist目录，若不存在则读取streamingAssets目录
             string bundlePath = File.Exists(abPath) ? abPath : abCachePath;
 
+#if UNITY_5
+            AssetBundle ab = AssetBundle.LoadFromFile(bundlePath);
+#else
             AssetBundle ab = AssetBundle.CreateFromFile(bundlePath);
+#endif
             if (ab == null)
             {
                 Debug.LogError(string.Format("Failed to load assetbundle step2: {0}", bundlePath));

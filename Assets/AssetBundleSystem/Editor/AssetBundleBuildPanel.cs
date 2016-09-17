@@ -6,7 +6,7 @@ namespace AssetBundleSystem
 {
     public class AssetBundleBuildPanel : EditorWindow
     {
-        const string configPath = "Assets/Scripts/AssetBundleManager/config.asset";
+        const string configPath = "Assets/AssetBundleSystem/config.asset";
 
         private AssetBundleBuildConfig _config;
         private static BuildTarget _buildTarget = BuildTarget.StandaloneWindows;
@@ -35,13 +35,12 @@ namespace AssetBundleSystem
         // inspector
         private int _inspectorType = 0;
 
-        [MenuItem("XYSanGuo/AssetBundleManager/Builder Panel")]
+        [MenuItem("AssetBundleSystem/Builder Panel")]
         static void Open()
         {
             AssetBundleBuildPanel panel = GetWindow<AssetBundleBuildPanel>("AssetBundle", true);
         }
 
-        //[MenuItem("XYSanGuo/AssetBundleManager/Build AssetBundles")]
         static void BuildAssetBundles()
         {
             AssetBundleBuildConfig config = LoadAssetAtPath<AssetBundleBuildConfig>(configPath);
@@ -49,8 +48,9 @@ namespace AssetBundleSystem
                 return;
 
 #if UNITY_5
+            AssetBundleBuilder builder = new AssetBundleBuilder5x(new AssetBundlePathResolver());
 #else
-            AssetBundleBuilder builder = new AssetBundleBuilder(new AssetBundlePathResolver());
+            AssetBundleBuilder builder = new AssetBundleBuilder4x(new AssetBundlePathResolver());
 #endif
             if (config.bundleInfoFileFormt == AssetBundleBuildConfig.Format.Binary)
                 builder.SetDataWriter(new AssetBundleDataWriterBinary());
@@ -65,11 +65,7 @@ namespace AssetBundleSystem
 
         static T LoadAssetAtPath<T>(string path) where T : Object
         {
-#if UNITY_5
-            return AssetDataBase.LoadAssetAtPath<T>(path);
-#else
             return AssetDatabase.LoadAssetAtPath(path, typeof(T)) as T;
-#endif
         }
 
         private void OnGUI()
